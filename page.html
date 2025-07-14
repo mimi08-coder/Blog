@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Binary Search | Tien Minh's Coding Journal</title>
+  <link rel="icon" href="../ava.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <img src="../ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+        <h1 class="text-xl font-bold text-blue-600">Tien Minh's Coding Journal</h1>
+      </div>
+      <div class="space-x-6 text-sm">
+        <a href="../index.html#home" class="hover:text-blue-600">Home</a>
+        <a href="../index.html#algorithms" class="hover:text-blue-600">Algorithms</a>
+        <a href="../index.html#arduino" class="hover:text-blue-600">Arduino</a>
+        <a href="../index.html#about" class="hover:text-blue-600">About</a>
+        <a href="../index.html#contact" class="hover:text-blue-600">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Binary Search in Competitive Programming</h2>
+
+    <!-- Table of Contents -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">📌 Table of Contents</h3>
+      <ul class="list-disc list-inside text-blue-600 space-y-1">
+        <li><a href="#intro" class="hover:underline">1. Introduction</a></li>
+        <li><a href="#use" class="hover:underline">2. When to Use</a></li>
+        <li><a href="#template" class="hover:underline">3. Template</a></li>
+        <li><a href="#example" class="hover:underline">4. Example</a></li>
+      </ul>
+    </div>
+
+    <!-- Section 1 -->
+    <div id="intro" class="mb-10">
+      <h3 class="text-2xl font-semibold text-blue-600 mb-2">1. Introduction</h3>
+      <p class="text-gray-700">
+        Binary search is a powerful algorithm used to quickly find elements in a sorted array, or to search over the space of possible answers in optimization problems.
+      </p>
+    </div>
+
+    <!-- Section 2 -->
+    <div id="use" class="mb-10">
+      <h3 class="text-2xl font-semibold text-blue-600 mb-2">2. When to Use</h3>
+      <ul class="list-disc list-inside text-gray-700 space-y-1">
+        <li>The array or search space is sorted or monotonic</li>
+        <li>You need to find a minimum/maximum that satisfies a condition</li>
+        <li>You want to optimize time complexity from O(n) to O(log n)</li>
+      </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div id="template" class="mb-10">
+      <h3 class="text-2xl font-semibold text-blue-600 mb-2">3. Binary Search Template</h3>
+      <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 overflow-x-auto"><code>
+// C++ Binary Search Template
+int l = 0, r = n - 1;
+while (l &lt;= r) {
+    int mid = (l + r) / 2;
+    if (a[mid] == target) return mid;
+    else if (a[mid] &lt; target) l = mid + 1;
+    else r = mid - 1;
+}
+return -1;
+      </code></pre>
+    </div>
+
+    <!-- Section 4 -->
+    <div id="example" class="mb-10">
+      <h3 class="text-2xl font-semibold text-blue-600 mb-2">4. Example Problem</h3>
+      <p class="text-gray-700 mb-4">
+        Find the first index where the array element is greater than or equal to a target.
+      </p>
+      <img src="../images/binary-search-example.png" alt="Binary Search Diagram"
+           class="rounded-lg shadow-lg max-w-full mx-auto" />
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-500 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+</body>
+</html>

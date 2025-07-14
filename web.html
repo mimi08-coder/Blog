@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="ava.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tien Minh's Coding Journal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- <h1 class="text-xl font-bold text-blue-600">Tien Minh's Coding Journal</h1> -->
+      <div class="flex items-center space-x-3">
+        <img src="ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+        <h1 class="text-xl font-bold text-blue-600">Tien Minh's Coding Journal</h1>
+      </div>
+
+      <div class="space-x-6 text-sm">
+        <a href="#home" class="hover:text-blue-600">Home</a>
+        <a href="#algorithms" class="hover:text-blue-600">Algorithms</a>
+        <a href="#arduino" class="hover:text-blue-600">Arduino</a>
+        <a href="#about" class="hover:text-blue-600">About</a>
+        <a href="#contact" class="hover:text-blue-600">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Home -->
+  <section id="home" class="max-w-3xl mx-auto mt-12 px-6 text-center">
+    <h2 class="text-3xl font-bold text-blue-700 mb-4">Welcome to My Coding World</h2>
+    <p class="text-lg text-gray-700">
+      I'm Phan Tien Minh, a high school student passionate about algorithms and Arduino robotics. This blog is where I share what I learn and build.
+    </p>
+  </section>
+
+<!-- Algorithms Section -->
+<section id="algorithms" class="max-w-5xl mx-auto mt-20 px-6">
+  <h2 class="text-2xl font-bold text-blue-700 mb-6">🧠 Algorithms</h2>
+  <div id="algorithms-list" class="grid gap-6 md:grid-cols-2"></div>
+</section>
+
+<!-- Arduino Section -->
+<section id="arduino" class="max-w-5xl mx-auto mt-20 px-6">
+  <h2 class="text-2xl font-bold text-blue-700 mb-6">🤖 Arduino Projects</h2>
+  <div id="arduino-list" class="grid gap-6 md:grid-cols-2"></div>
+</section>
+
+
+  <!-- About -->
+  <section id="about" class="max-w-3xl mx-auto mt-20 px-6 text-center">
+    <h2 class="text-2xl font-bold text-blue-700 mb-4">👩‍💻 About Me</h2>
+    <p class="text-gray-700">
+      I'm a 12th-grade student from Vietnam, aiming to study IT abroad. I love solving problems and learning new technologies. I created this blog to track my journey and share knowledge with others interested in CP and Arduino.
+    </p>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="max-w-3xl mx-auto mt-20 px-6 text-center">
+    <h2 class="text-2xl font-bold text-blue-700 mb-4">📬 Contact</h2>
+    <p class="text-gray-700">You can reach me through:</p>
+    <div class="mt-4 space-y-2">
+      <p>📧 Email: <a href="mailto:tienminhphan08@gmail.com" class="text-blue-500 hover:underline">tienminhphan08@gmail.com</a></p>
+      <p>🐙 GitHub: <a href="https://github.com/mimi08-coder" class="text-blue-500 hover:underline" target="_blank">github.com/mimi08-coder</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-500 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+  <script src="blogData.js"></script>
+<script>
+  function renderPosts(category, elementId) {
+    const container = document.getElementById(elementId);
+    blogPosts[category].forEach(post => {
+      const html = `
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+          <h3 class="text-xl font-semibold text-blue-600">${post.title}</h3>
+          <p class="mt-2 text-gray-600">${post.desc}</p>
+          <a href="${post.link}" class="text-blue-500 mt-2 inline-block hover:underline">Read more</a>
+        </div>`;
+      container.innerHTML += html;
+    });
+  }
+
+  renderPosts("algorithms", "algorithms-list");
+  renderPosts("arduino", "arduino-list");
+</script>
+
+</body>
+</html>
