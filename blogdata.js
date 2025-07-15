@@ -4,7 +4,7 @@ const blogPosts = {
       id: "convex-hull",
       title: "Convex Hull Trick Explained",
       desc: "A deep dive into optimization techniques using convex hulls.",
-      link: "/Blog/page.html"
+      link: "page.html"
     },
     {
       id: "li-chao-tree",
