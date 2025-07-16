@@ -19,16 +19,16 @@
     <!-- Logo + title -->
     <div class="flex items-center space-x-3">
       <img src="ava.png" alt="Logo" class="h-7 w-7 object-contain" />
-      <h1 class="text-xl font-bold text-blue-600">Tien Minh's Coding Journal</h1>
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
     </div>
 
     <!-- Desktop nav links -->
     <div class="hidden md:flex space-x-6 text-sm">
-      <a href="#home" class="hover:text-blue-600">Home</a>
-      <a href="#algorithms" class="hover:text-blue-600">Algorithms</a>
-      <a href="#arduino" class="hover:text-blue-600">Arduino</a>
-      <a href="#about" class="hover:text-blue-600">About</a>
-      <a href="#contact" class="hover:text-blue-600">Contact</a>
+      <a href="#home" class="hover:text-blue-700">Home</a>
+      <a href="#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="#about" class="hover:text-blue-700">About</a>
+      <a href="#contact" class="hover:text-blue-700">Contact</a>
     </div>
 
     <!-- Hamburger button -->
@@ -45,11 +45,11 @@
 
   <!-- Mobile nav links -->
   <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
-    <a href="#home" class="block text-gray-700 hover:text-blue-600">Home</a>
-    <a href="#algorithms" class="block text-gray-700 hover:text-blue-600">Algorithms</a>
-    <a href="#arduino" class="block text-gray-700 hover:text-blue-600">Arduino</a>
-    <a href="#about" class="block text-gray-700 hover:text-blue-600">About</a>
-    <a href="#contact" class="block text-gray-700 hover:text-blue-600">Contact</a>
+    <a href="#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
   </div>
 </nav>
 
@@ -94,7 +94,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="mt-20 bg-white text-center py-6 text-gray-500 text-sm">
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
     © 2025 Phan Tien Minh. All rights reserved.
   </footer>
   <script src="blogdata.js"></script>
@@ -104,7 +104,7 @@
     blogPosts[category].forEach(post => {
       const html = `
         <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
-          <h3 class="text-xl font-semibold text-blue-600">${post.title}</h3>
+          <h3 class="text-xl font-semibold text-blue-700">${post.title}</h3>
           <p class="mt-2 text-gray-600">${post.desc}</p>
           <a href="${post.link}" class="text-blue-700 mt-2 inline-block hover:underline">Read more</a>
         </div>`;
