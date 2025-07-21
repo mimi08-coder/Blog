@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/cht/cht.html" />
+  <meta charset="UTF-8" />
+  <title>Convex Hull Trick | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn how the Convex Hull Trick optimizes queries over a set of linear functions. This article explains the algorithm's idea, implementation, and use cases in competitive programming, with clean code snippets and visuals." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Convex Hull Trick for Line Queries</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Problem</a></li>
+        <li><a href="#structure" class="hover:underline">Create the CHT structure</a></li>
+        <li><a href="#build" class="hover:underline">Build function</a></li>
+        <li><a href="#add" class="hover:underline">Add function</a></li>
+        <li><a href="#get" class="hover:underline">Get function</a></li>
+        <li><a href="#template" class="hover:underline">Template</a></li>
+        <li><a href="#problems" class="hover:underline">Problem set</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Problem</h2>
+      <p class="mb-3">
+        Given a set of linear functions in the form <code>f(x) = ax + b</code> and a series of query points <code>x</code>, determine the maximum or minimum value of <code>f(x)</code> for each query.
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          <strong>Solution:</strong> Use the Convex Hull Trick algorithm to efficiently solve this problem. This algorithm selects lines such that they form a convex hull, thereby optimizing the search for max/min values.
+        </li>
+        <li>
+          The complexity of all add operations is <code>O(n)</code> since there are <code>n</code> lines and only <code>n</code> lines can be added or removed.
+        </li>
+        <li>
+          The complexity of each get operation is <code>O(log n)</code> due to the use of binary search.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Create the CHT structure</h2>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// Convex Hull Trick structure
+struct CHT
+{
+  int n,a[maxn],b[maxn];
+  vector &lt;int&gt; line;
+  vector &lt;ld&gt; point;
+  CHT()
+  {
+	//constructor
+    point.pp(-1e18);
+  }
+
+  ld intersect (int x, int y)
+  {
+    //calculate intersect of 2 lines
+    return (ld)1.0 * (b[x]-b[y])/(a[y]-a[x]);
+  }
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Build function</h2>
+      <p class="mb-3">
+              For the maximum-value problem, sort the lines by their slope in ascending order. This ensures that the maximum values of <code>ax + b</code> at any <code>x</code> will lie on the upper convex hull.
+              (For the minimum-value problem, simply sort in descending order instead.)
+      </p>  
+      <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+
+      <div class="border-l-4 border-black pl-4 text-sm text-gray-800 mb-4">
+        On the left is the max convex hull function, on the right is the min convex hull.
+      </div>
+      <img src="2.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void build()
+{
+  vector &lt;int&gt; id;
+  for(int i=1;i&lt;=n;++i)   id.pp(i);
+  sort(all(id),[&](const int& x, const int& y){
+    return a[x]&lt;a[y];});
+  for(int i:id)   add(i);
+}
+        </code></pre>
+      </div>
+    </section>
+            
+     <!-- Section 4 -->
+    <section id="add" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Add function</h2>
+      
+      <p class="mb-3">
+        <strong>Case 1:</strong> Slope coefficients are equal <code>a</code> → Remove edges based on b
+      </p>
+      <p class="mb-3">
+        <strong>Case 2:</strong> Slope coefficients are different <code>a</code> (applies to both types of Convex Hull)      
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          Let the line to be added be d, the last line in the Convex Hull be u, and the line before u be v
+        <li>
+          If the x-coordinate of the intersection point of (d, u) is less than (d, v) → Remove line u        
+        </li>
+        <li>
+          Add line d to the Convex Hull
+        </li>
+      </ul>
+      <img src="3.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void add(int i)
+{
+  while(line.size()&gt;0)
+  {
+    if(a[line.back()]==a[i])
+    {
+      if(b[line.back()]&gt;=b[i])    break;
+      else
+      {
+        line.pop_back();
+        if(line.size()&gt;0)   point.pop_back();
+      }
+    }
+    else
+    {
+      if(line.size()&lt;2)   break;
+      if(intersect(i,line.back())&lt;intersect(i,line[line.size()-2]))
+      {
+        line.pop_back();
+        if(line.size()&gt;0)   point.pop_back();
+      }
+      else    break;
+    }
+  }
+  if(line.size()==0 or a[line.back()]!=a[i])
+  {
+      if(line.size()&gt;0)   point.pp(intersect(line.back(),i));
+      line.pp(i);
+  }
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="get" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Get function</h2>
+      <p class="mb-3">
+        When we have x , the remaining task is to perform binary search on the point vector and print the result
+      </p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+ll gt(ll x)
+{
+  int id=upper_bound(all(point),x)-point.begin()-1;
+  return a[line[id]]*x+b[line[id]];
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="template" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">6. Template</h2>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;bits/stdc++.h&gt;
+#define ff first
+#define ss second
+#define pp push_back
+#define all(x) (x).begin(),(x).end()
+using namespace std;
+using ll = long long;
+using ld = long double;
+using pii = pair &lt;int,int&gt;;
+using pll = pair &lt;ll,ll&gt;;
+using pld = pair &lt;ld,ld&gt;;
+const char el ='\n';
+const char sp = ' ';
+const int maxn = 2e5+5, mod = 1e9+7;
+
+struct CHT
+{
+  int n,a[maxn],b[maxn];
+  vector &lt;int&gt; line;
+  vector &lt;ld&gt; point;
+
+  CHT(){
+    point.pp(-1e18);}
+
+    ld intersect (int x, int y){
+      return (ld)1.0 * (b[x]-b[y])/(a[y]-a[x]);}
+
+    void add(int i)
+    {
+      while(line.size()&gt;0)
+      {
+        if(a[line.back()]==a[i])
+        {
+          if(b[line.back()]&gt;=b[i])    break;
+          else
+          {
+            line.pop_back();
+            if(line.size()&gt;0)   point.pop_back();
+          }
+        }
+        else
+        {
+          if(line.size()&lt;2)   break;
+          if(intersect(i,line.back())&lt;intersect(i,line[line.size()-2]))
+          {
+            line.pop_back();
+            if(line.size()&gt;0)   point.pop_back();
+          }
+          else    break;
+          }
+        }
+        if(line.size()==0 or a[line.back()]!=a[i])
+        {
+            if(line.size()&gt;0)   point.pp(intersect(line.back(),i));
+            line.pp(i);
+        }
+    }
+
+    void build()
+    {
+      vector &lt;int&gt; id;
+      for(int i=1;i&lt;=n;++i)   id.pp(i);
+      sort(all(id),[&](const int& x, const int& y){
+        return a[x]&lt;a[y];});
+      for(int i:id)   add(i);
+    }
+
+    ll gt(ll x)
+    {
+      int id=upper_bound(all(point),x)-point.begin()-1;
+      return a[line[id]]*x+b[line[id]];
+    }
+
+};
+CHT f;
+
+
+void input()
+{
+  cin&gt;&gt;f.n;
+  for(int i=1;i&lt;=f.n;++i)   cin&gt;&gt;f.a[i]&gt;&gt;f.b[i];
+  f.build();
+  int m;
+  cin&gt;&gt;m;
+  while(m--&gt;0)
+  {
+    ll x;
+    cin&gt;&gt;x;
+    cout&lt;&lt;f.gt(x)&lt;&lt;el;
+  }
+}
+
+int main()
+{
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  input();
+  return 0;
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="problems" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">7. Problem set</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://vjudge.net/contest/629154" class="text-blue-600 hover:underline">Contest: Convex Hull Trick - Virtual Judge</a></li>
+        <li><a class="text-blue-600">Contest password: "goodtimemakethings"</a></li>
+      </ul>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>
