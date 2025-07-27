@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/lichao/lichao.html" />
+  <meta charset="UTF-8" />
+  <title>Li Chao tree | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn how Li Chao tree optimizes queries over a set of linear functions. This article explains the algorithm's idea, implementation, and use cases in competitive programming, with clean code snippets and visuals." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Li Chao tree for Line Queries</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#intro" class="hover:underline">Introduction</a></li>
+        <li><a href="#structure" class="hover:underline">Initialization</a></li>
+        <li><a href="#add" class="hover:underline">Add function</a></li>
+        <li><a href="#get" class="hover:underline">Get function</a></li>
+        <li><a href="#template" class="hover:underline">Template</a></li>
+        <li><a href="#problems" class="hover:underline">Problem set</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="intro" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Introduction</h2>
+      <p class="mb-3">
+        Li Chao tree is another technique for solving line queries problem. It is primarily used when we need to add a new line and find the maximum or minimum value at a specific point. This technique leverages the segment tree structure to quickly find the required values.      
+      </p>
+      <p class="mb-3">
+        Li Chao tree differs from CHT in that it is similar to dynamic CHT, adding edges based on any angle coefficient without affecting the result
+      </p>
+      <p class="mb-3">
+        However, the Li Chao tree cannot work if the input size is too large due to the use of a segment tree (this can be addressed by compressing the numbers).
+      </p>
+      <p class="mb-3">
+        Since it is a segment tree, the add and get operations have a complexity of <code>log(n)</code>.
+      </p>
+      <p class="mb-3">
+        <strong>Explaination:</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          Each node in the segment tree has the form <code>(L,R)</code>, where each node stores the line segment such that <code>mid=(L+R)/2</code> reaches the maximum or minimum value.        </li>
+        <li>
+          Each get operation traverses the tree from the root to the leaf node to find the maximum value that can be reached        </li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Initialization</h2>
+      <p class="mb-3">
+        Create a segment tree using the struct line
+      </p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// Li Chao tree structure
+struct line
+{
+  ll a, b;
+  ll operator()(long long x)
+  {
+    return a*x+b;
+  }
+};
+line st[40*maxn];
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="add" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Add function</h2>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void add(int id, int l, int r, line segment)
+{
+  if(l+1==r)
+  {
+    if(segment(l)>st[id](l))
+    swap(segment,st[id]);
+  }
+  else
+  {
+    int mid = (l+r)/2;
+    if(st[id].a>segment.a)  swap(segment,st[id]);
+    if(segment(mid)>st[id](mid))
+    {
+      swap(segment,st[id]);
+      add(id*2,l,mid,segment);
+    }
+    else
+      add(id*2+1,mid,r,segment);
+  }
+}
+        </code></pre>
+      </div>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          Since the case where <code>l+1=r</code> is straightforward, we will analyze the remaining case
+        </li>
+        <li>
+         We will swap the two lines based on the angle coefficient to reduce the number of cases to consider
+        </li>
+      </ul>
+     
+      <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+
+      <div class="border-l-4 border-black pl-4 text-sm text-gray-800 mb-4">
+        After swapping the two lines, we have → Red: Old     Blue: New       </div>
+      <img src="2.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          If the old line provides a better value at <code>Mid</code>, we keep the line at the current node and update the right node with the new line (since the new line is better than the old line from the segment <code>Mid → R</code>)        
+        </li>
+        <li>
+          Otherwise, we swap the two lines and update the left node with the new line      
+        </li>
+      </ul>
+      <p class="mb-3">
+        ➤ <u>With this approach, we can be sure that during the result retrieval process, we will find the line segment that provides the best value (Read more about the get function for further understanding)</u>      
+      </p>
+    </section>
+            
+     <!-- Section 4 -->
+    <section id="get" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Get function</h2>
+      
+      <p class="mb-3">
+        Travel from the root of the tree to the leaf node to find the best possible maximum value      
+      </p>
+      
+     <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+ll get(int id, int l, int r, ll val)
+{
+  if(l+1==r)
+    return st[id](val);
+  else
+  {
+    int mid = (l+r)/2;
+    if(val<=mid)
+      return max(st[id](val),get(id*2,l,mid,val));
+    else
+      return max(st[id](val),get(id*2+1,mid,r,val));
+  }
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="template" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Template</h2>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;iostream&gt;
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
+using namespace std;
+using ll = long long;
+const int maxn = 1e5+5;
+const ll inf = 1e18+1;
+int n,w[maxn];
+ll h[maxn],sum[maxn],dp;
+
+struct line
+{
+  ll a, b;
+  ll operator()(long long x)
+  {
+    return a*x+b;
+  }
+};
+line st[40*maxn];
+
+void add(int id, int l, int r, line segment)
+{
+  if(l+1==r)
+  {
+    if(segment(l)&lt;st[id](l))
+      swap(segment,st[id]);
+  }
+  else
+  {
+    int mid = (l+r)/2;
+    if(st[id].a&gt;segment.a)  swap(segment,st[id]);
+    if(segment(mid)&lt;st[id](mid))
+    {
+      swap(segment,st[id]);
+      add(id*2+1,mid,r,segment);
+    }
+    else
+      add(id*2,l,mid,segment);
+  }
+}
+
+ll get(int id, int l, int r, ll val)
+{
+  if(l+1==r)
+    return st[id](val);
+  else
+  {
+    int mid = (l+r)/2;
+    if(val&lt;=mid)
+      return min(st[id](val),get(id*2,l,mid,val));
+    else
+      return min(st[id](val),get(id*2+1,mid,r,val));
+  }
+}
+
+void input()
+{
+  for(int i=0;i&lt;40*maxn;++i)
+  {
+    st[i].a=0;
+    st[i].b = inf;
+  }
+  cin&gt;&gt;n;
+  for(int i=1;i&lt;=n;++i)   cin&gt;&gt;h[i];
+  for(int i=1;i&lt;=n;++i)   cin&gt;&gt;w[i];
+  for(int i=1;i&lt;=n;++i)   sum[i] = sum[i-1]+w[i];
+  line tmp;
+  tmp.a = -2*h[1];
+  tmp.b = h[1]*h[1] - sum[1];
+  add(1,0,1e6,tmp);
+  for(int i=2;i&lt;=n;++i)
+  {
+    dp = h[i]*h[i] + sum[i-1] + get(1,0,1e6,h[i]);
+    tmp.a = -2*h[i];
+    tmp.b = h[i]*h[i] - sum[i] + dp;
+    add(1,0,1e6,tmp);
+  }
+  cout&lt;&lt;dp;
+}
+
+int main()
+{
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  input();
+  return 0;
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="problems" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">6. Problem set</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://vjudge.net/contest/629154#problem/I" class="text-blue-600 hover:underline">Exercise Problem</a></li>
+        <li><a class="text-blue-600">Contest password: "goodtimemakethings"</a></li>
+        <li><a href="https://vjudge.net/solution/51861829/mZHLSZVc5Gk943eGFG2P" class="text-blue-600 hover:underline">Solution</a></li>
+      </ul>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

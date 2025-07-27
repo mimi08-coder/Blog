@@ -10,7 +10,7 @@ const blogPosts = {
       id: "li-chao-tree",
       title: "Li Chao Tree for DP",
       desc: "Use Li Chao Trees to optimize linear functions in DP.",
-      link: "#li-chao-tree"
+      link: "algo/lichao/lichao.html"
     },
     {
         id: "segment-tree",
