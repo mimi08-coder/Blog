@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/dij/dij.html" />
+  <meta charset="UTF-8" />
+  <title>Dijikstra's Algorithm | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Lean a classic graph search algorithm used to find the shortest paths between nodes in a weighted graph." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Dijikstra's Algorithm</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#intro" class="hover:underline">Introduction</a></li>
+        <li><a href="#work" class="hover:underline">How it Works</a></li>
+        <li><a href="#template" class="hover:underline">Template</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="intro" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Introduction</h2>
+      <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3">
+        Dijkstra's algorithm is a greedy algorithm designed to solve the single-source shortest path problem for a graph with <strong>non-negative edge weights</strong>. Its goal is to find the shortest path from a starting node to all other nodes in the graph.      </p>
+        
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="work" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. How it Works</h2>
+      <p class="mb-3">
+        The algorithm operates by maintaining a set of visited nodes and a set of unvisited nodes. It also keeps track of the shortest known distance from the starting node to every other node. </p>        
+        <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            <strong>Initialization:</strong> The algorithm starts by assigning a distance of 0 to the starting node and an infinite distance to all other nodes. It then places the starting node into a priority queue.        </li>
+        <li>
+            <strong>Greedy Selection:</strong> The algorithm repeatedly extracts the node with the smallest known distance from the priority queue.        </li>
+        <li>
+            <strong>Relaxation:</strong> For the extracted node, it examines all its unvisited neighbors. For each neighbor, it calculates a potential new shortest distance by adding the current node's distance to the weight of the edge connecting them.        </li>
+        <li>
+            <strong>Update:</strong> If this new distance is shorter than the neighbor's current known distance, the algorithm updates the neighbor's distance and adds it to the priority queue. This process is called "relaxation."</li>
+        <li>
+            <strong>Termination</strong> The algorithm continues until the priority queue is empty or all nodes have been visited. </li>
+      </ul>
+      <p class="mb-3">
+        <strong>Time complexity:</strong> <code>O((E+V)logV)</code>, where <code>V</code> is the number of vertices (nodes) and <code>E</code> is the number of edges.</p>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="template" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Template</h2>
+      
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;bits/stdc++.h&gt;
+#define ff first
+#define ss second
+#define pp push_back
+using namespace std;
+using ll = long long;
+using ld = long double;
+using pii = pair &lt;int,int&gt;;
+using pll = pair &lt;ll,ll&gt;;
+using pld = pair &lt;ld,ld&gt;;
+const char el ='\n';
+const char sp = ' ';
+const int maxn = 1e5+5, mod = 1e9+7;
+const ll inf = 1e18;
+int n,m,s,t;
+ll d[maxn];
+vector &lt;pii&gt; adj[maxn];
+priority_queue &lt;pll,vector&lt;pll&gt;,greater&lt;pll&gt;&gt; f;
+
+void input()
+{
+    // Read number of nodes (n) and edges (m)
+    cin&gt;&gt;n&gt;&gt;m;
+    // Set source (s) and target (t) nodes
+    s=1;
+    t=n;
+    // Initialize distances to all nodes as infinity
+    fill(d,d+n+1,inf);
+    // Read graph edges and weights
+    for(int i=1,u,v,w;i&lt;=m;++i)
+    {
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        // Add edge from u to v with weight w
+        adj[u].pp({v,w});
+    }
+    // Set distance to the source node to 0
+    d[s]=0;
+    // Push the source node with its distance into the priority queue
+    f.push({0,s});
+
+    // Main loop of Dijkstra's algorithm
+    while(f.size()&gt;0)
+    {
+        // Get the node with the smallest distance from the priority queue
+        pll tmp=f.top();
+        int v=tmp.ss;
+        // Remove it from the queue
+        f.pop();
+        // Optimization: if we've already found a shorter path, skip this node
+        if(d[v]!=tmp.ff)  continue;
+        // Iterate through all neighbors of the current node
+        for(pii i : adj[v])
+        {
+            // Relaxation step: check if a shorter path to the neighbor exists
+            if(d[v]+i.ss&lt;d[i.ff])
+            {
+                // Update the distance to the neighbor
+                d[i.ff]=d[v]+i.ss;
+                // Push the neighbor with its new, shorter distance into the queue
+                f.push({d[i.ff],i.ff});
+            }
+        }
+    }
+    // Check if the target node is reachable
+    if(d[t]&lt;inf)     cout&lt;&lt;d[t];
+    else     cout&lt;&lt;-1; // If not, print -1
+}
+
+int32_t main()
+{
+    freopen("DIJKSTRA.INP","r",stdin);
+    freopen("DIJKSTRA.OUT","w",stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    // Call the function to run the algorithm
+    input();
+    return 0;
+}
+
+        </code></pre>
+      </div>
+    </section>
+            
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

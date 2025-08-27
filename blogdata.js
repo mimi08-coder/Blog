@@ -29,6 +29,12 @@ const blogPosts = {
         title: "Mo Algorithm",
         desc: "Mo's algorithm efficiently answers offline range queries on an array by reordering them to minimize redundant computations",
         link: "algo/mo/mo.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "Dijikstra's Algorithm",
+        desc: "Lean a classic graph search algorithm used to find the shortest paths between nodes in a weighted graph.",
+        link: "algo/dij/dij.html"
     }
 
   ],
