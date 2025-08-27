@@ -17,6 +17,12 @@ const blogPosts = {
         title: "Minimum Spanning Tree Algorithms",
         desc: "How to find the most cost-effective way to connect all points in a network",
         link: "algo/mst/mst.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "Joints and Bridges in graphs",
+        desc: "Understanding critical connections in a graph",
+        link: "algo/pab/pab.html"
     }
 
   ],

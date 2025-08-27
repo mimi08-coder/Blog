@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/pab/pab.html" />
+  <meta charset="UTF-8" />
+  <title>Joints and Bridges | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn how to implement DFS tree and SCC. This article explains the algorithm's idea, implementation, and use cases in competitive programming, with clean code snippets and visuals." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Joints and Bridges in graphs</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#dfstree" class="hover:underline">DFS tree</a></li>
+        <li><a href="#bridge" class="hover:underline">What is a bridge?</a></li>
+        <li><a href="#joint" class="hover:underline">What is a joint?</a></li>
+        <li><a href="#scc" class="hover:underline">Strongly Connected Components</a></li>        
+        <li><a href="#prob" class="hover:underline">Problem set</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="dfstree" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. DFS tree</h2>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+//DFS tree
+int h[maxn],in[maxn],out[maxn],low[maxn];
+
+void DFS(int u, int v)
+{
+    ++ti;
+    in[u]=ti;
+    low[u]=ti;
+    for(int i:adj[u])
+    {
+        if(i==v)    continue;
+        if(!in[i])
+        {
+            DFS(i,u);
+            low[u]=min(low[u],low[i]);
+        }
+        else    low[u]=min(low[u],in[i]);
+    }
+    out[u]=ti;
+}
+        </code></pre>
+      </div>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            Basically, <code>in</code> and <code>out</code> arrays will be calculated as in a normal Euler tour. The rest will be an array that helps us identify whether a vertex is a joint or an edge is a bridge.        </li>
+      </ul>  
+        <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+        <img src="2.png" alt="Convex vs Concave"class="rounded-md mb-2">
+
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="bridge" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. What is a bridge?</h2>
+        <p class="mb-3">
+            <strong>Explanation: </strong>A bridge is an edge that, when removed it, increases the number of connected components in the graph.
+        </p> 
+        <img src="3.png" alt="Convex vs Concave"class="rounded-md mb-2">
+        <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            If the edge to be removed is a dashed edge, it is definitely not a bridge. 
+        </li>
+        <li>
+            Suppose we want to remove edge (7,9). If the subtree of 9 has a dashed line going upwards, then (7,9) is not a bridge edge, and vice versa.
+        </li>
+        </ul>  
+        <p class="mb-3">
+              <u>→ Therefore, to check if an edge <code>(u,v)</code> is a bridge, simply check if <code>low(u) = in(u)</code>. If so, it is a bridge edge. </u>
+        </p>  
+    </section>
+
+    <!-- Section 3 -->
+    <section id="joint" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. What is a joint?</h2>
+        <p class="mb-3">
+            <strong>Explanation: </strong>A joint is a vertex that, when removed along with its incident edges, increases the number of connected components in the graph.
+        </p>         
+        <p class="mb-3">
+          <strong>We will divide into 2 cases:</strong>
+        </p> 
+        <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          If the vertex being examined is the root of the DFS tree, and the root has two or more direct children, then the root is a match.        </li>
+        <li>
+          If the vertex under consideration is not the root of the DFS tree (removing vertex <code>u</code>, where <code>v</code> is a direct child of u in the DFS tree). If there exists a vertex <code>v</code> such that <code>low(v) ≥ num(u)</code>, then <code>u</code> is a joint.        </li>
+        </ul>  
+        <p class="mb-3">
+              <u>→ With this checking method, we can determine whether a vertex is a joint directly during the DFS process.</u>
+        </p>  
+              <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+bool mark [maxn];
+// mark[u] = true means that u is a joint 
+void DFS(int u, int v)
+{
+  int cnt=0;
+  ++ti;
+  in[u]=low[u]=ti;
+  for(int i:adj[u])
+  {
+  if(i==v)    continue;
+  if(!in[i])
+    {
+      ++cnt;
+      DFS(i,u);
+      low[u]=min(low[u],low[i]);
+      if(v==0 && cnt&gt;1)   mark[u]=true;
+      else if(low[i]&gt;=in[u]) mark[u]=true;
+    }
+    else    low[u]=min(low[u],in[i]);
+  }
+  out[u]=ti;
+}
+
+        </code></pre>
+      </div>
+    </section>
+            
+     <!-- Section 4 -->
+    <section id="scc" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Strongly Connected Components (Tarjan's algorigthm)</h2>
+      
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+//SCC - Tarjan's algorithm
+void DFS(int u)
+{
+  in[u] = low[u] = ++ti;
+  f.push(u);
+  for(int i:adj[u])
+  {
+    if(deleted[i])  continue;
+    if(in[i])   low[u] = min(low[u],in[i]);
+    else
+    {
+      DFS(i);
+      low[u] = min(low[u],low[i]);
+    }
+  }
+  if(low[u] == in[u])
+  {
+    scc++;
+    int v;
+    do {
+      v = f.top();
+      f.pop();
+      id[v] = scc;
+      deleted[v] = true;
+    }
+    while (v != u);
+  }
+}
+
+void input()
+{
+  cin&gt;&gt;n&gt;&gt;m;
+  for(int i=1,u,v;i&lt;=m;++i)
+  {
+    cin&gt;&gt;u&gt;&gt;v;
+    adj[u].pp(v);
+  }
+  for(int i=1;i&lt;=n;++i)
+    if(!in[i])  DFS(i);
+  cout&lt;&lt;scc;
+}
+
+        </code></pre>
+      </div>
+    </section>
+
+
+    <!-- Section 7 -->
+    <section id="prob" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Problem set</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://oj.vnoi.info/problem/nkpolice" class="text-blue-600 hover:underline">oj.vnoi.info NKPOLICE</a></li>
+        <li><a href="https://oj.vnoi.info/problem/kbuild" class="text-blue-600 hover:underline">oj.vnoi.info KBUILD</a></li>
+      </ul>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>
