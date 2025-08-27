@@ -23,6 +23,12 @@ const blogPosts = {
         title: "Joints and Bridges in graphs",
         desc: "Understanding critical connections in a graph",
         link: "algo/pab/pab.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "Mo Algorithm",
+        desc: "Mo's algorithm efficiently answers offline range queries on an array by reordering them to minimize redundant computations",
+        link: "algo/mo/mo.html"
     }
 
   ],
