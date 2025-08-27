@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/mst/mstt.html" />
+  <meta charset="UTF-8" />
+  <title>Minimum Spanning Tree | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn how to find the most cost-effective way to connect all points in a network" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Minimum Spanning Tree</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#prob" class="hover:underline">Properties</a></li>
+        <li><a href="#krus" class="hover:underline">Kruskal (Sparse Graph)</a></li>
+        <li><a href="#prim" class="hover:underline">Prim (Dense Graph)</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="prob" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Properties</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          <strong>Cycle property:</strong> If edge <code>e</code> has the largest weight in a cycle, then <code>e</code> does not belong to any minimum spanning tree
+        </li>
+        <li>
+          <strong>Shortest path:</strong> If <code>w</code> is the maximum weight on the path from <code>u → v</code>, then all paths from <code>u → v</code> in the original graph have a maximum weight greater than <code>w</code>
+        </li>        
+        <li>
+          <strong>Uniqueness property:</strong> If all weights are distinct, then there exists exactly one minimum spanning tree
+        </li>        
+        <li>
+          <strong>Minimum edge property:</strong>  If <code>e</code> is the edge with the smallest weight in the graph, then it belongs to every minimum spanning tree
+        </li>        
+      </ul>
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="krus" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Kruskal (Sparse Graph)</h2>
+        <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            If the graph is sparse, Kruskal is used instead of Prim due to its simplicity.        </li>
+        <li>
+            Add edges in increasing weight order, using disjoint sets to check for cycles.        </li>          
+        <li>
+            <strong>Time complexity:</strong> <code>O(log(E))</code>        </li>
+        </ul>
+        <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// Kruskal's Algorithm for Minimum Spanning Tree
+#include &lt;bits/stdc++.h&gt;
+#define pp push_back
+using namespace std;
+using ll = long long;
+const int maxn = 1e5+5;
+int n,m,dsu[maxn],sz[maxn],cnt=0;
+ll ans;
+struct node
+{
+    int u, v, w;
+};
+vector &lt;node&gt; e;
+
+bool cmp(node x, node y)
+{
+    return x.w&lt;y.w;
+}
+
+// Disjoint Set Union (DSU) functions
+int find_set(int u)
+{
+    if(dsu[u]==u)   return u;
+    else            return dsu[u]=find_set(dsu[u]);
+}
+
+void unite(int u, int v, int w)
+{
+    int id=find_set(u), id1=find_set(v);
+    if(id!=id1)
+    {
+        if(sz[id]&gt;=sz[id1])
+        {
+            sz[id]+=sz[id1];
+            dsu[id1]=id;
+        }
+        else
+        {
+            sz[id1]+=sz[id];
+            dsu[id]=id1;
+        }
+        ans+=w;
+        ++cnt;
+    }
+}
+
+void input()
+{
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;++i)
+    {
+        dsu[i]=i;
+        sz[i]=1;
+    }
+    for(int i=1,u,v,w;i&lt;=m;++i)
+    {
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        node tmp;
+        tmp.u=u;
+        tmp.v=v;
+        tmp.w=w;
+        e.pp(tmp);
+    }
+    sort(all(e),cmp);
+    for(node i : e) unite(i.u,i.v,i.w);
+    if(cnt==n-1)    cout&lt;&lt;ans;
+    else            cout&lt;&lt;-1;
+}
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    input();
+    return 0;
+}
+
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="prim" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Prim (Dense Graph)</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            If the graph has few vertices and many edges, use Prim's algorithm to optimize time.                
+        </li>    
+        <li>
+            The approach is similar to Dijkstra's algorithm: create an array <code>dis[i]</code> representing the shortest distance from the skeleton tree to vertex <code>i</code>. After each iteration, add vertex <code>i</code> with the smallest <code>dis[i]</code> to the skeleton tree and update the adjacent <code>dis[j]</code> values.  
+        </li>
+        <li>
+            <strong>Time complexity:</strong> <code>O(n^2 + E)</code>        </li>
+        </ul>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// Prim's Algorithm for Minimum Spanning Tree            
+#include &lt;bits/stdc++.h&gt;
+#define ff first
+#define ss second
+#define pp push_back
+#define all(x) (x).begin(),(x).end()
+using namespace std;
+using ll = long long;
+using pii = pair &lt;int,int&gt;;
+const char el ='\n';
+const char sp = ' ';
+const int maxn = 1e5+5, inf = 1e9+1;
+int n,m,d[maxn];
+bool mark [maxn];
+vector &lt;pii&gt; adj[maxn];
+ll ans;
+
+void Prim()
+{
+    d[1]=0;
+    int cnt = 0;
+    while(cnt&lt;n)
+    {
+        int mn = inf, id;
+        for(int i=1;i&lt;=n;++i){
+            if(!mark[i] && d[i]&lt;mn){
+                mn = d[i];
+                id = i;
+            }
+        }
+        ++cnt;
+        mark[id] = true;
+        ans +=mn;
+        for(pii i : adj[id])    d[i.ff] = min(d[i.ff],i.ss);
+    }
+    cout&lt;&lt;ans;
+}
+
+void input()
+{
+    cin&gt;&gt;n&gt;&gt;m;
+    fill(d,d+n+1,inf);
+    for(int i=1,u,v,w;i&lt;=m;++i)
+    {
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        adj[u].pp({v,w});
+        adj[v].pp({u,w});
+    }
+    Prim();
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    input();
+    return 0;
+}
+
+        </code></pre>
+      </div>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

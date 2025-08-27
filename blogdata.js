@@ -9,14 +9,14 @@ const blogPosts = {
     {
       id: "li-chao-tree",
       title: "Li Chao Tree for DP",
-      desc: "Use Li Chao Trees to optimize linear functions in DP.",
+      desc: "An improved version of Convex Hull Trich",
       link: "algo/lichao/lichao.html"
     },
     {
-        id: "segment-tree",
-        title: "Segment Tree with Lazy Propagation",
-        desc: "Efficient range queries and updates using segment trees.",
-        link: "#segment-tree"
+        id: "min-spanning-tree",
+        title: "Minimum Spanning Tree Algorithms",
+        desc: "How to find the most cost-effective way to connect all points in a network",
+        link: "algo/mst/mst.html"
     }
 
   ],
