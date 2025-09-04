@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/hash/hash.html" />
+  <meta charset="UTF-8" />
+  <title>Hash | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Hashing is a technique that converts a string into a number, making it much faster to compare or search substrings" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Hash</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Introduction</a></li>
+        <li><a href="#structure" class="hover:underline">Idea behind</a></li>
+        <li><a href="#build" class="hover:underline">Hash XOR</a></li>
+        <li><a href="#add" class="hover:underline">Hash sum</a></li>
+        <li><a href="#get" class="hover:underline">Hash tree</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Introduction</h2>
+
+      <p class="mb-3">
+        In problems that involve comparing two strings, the time complexity is O(n), where n is the length of the string. For tasks that require many such comparisons, this complexity is too high.       </p>
+    <p class="mb-3">
+        <u>→  That is why hashing is often used:</u> it is <strong>easy to implement</strong>, very <strong>efficient</strong>, and has a very <strong>small error probability</strong>. </p>
+      
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Idea behind</h2>
+        <p class="mb-3">
+            <strong>2.1 How does hashing work?</strong></p>
+        <p class="mb-3">
+            Suppose we only deal with strings consisting of lowercase English letters. Each character is mapped to a number: for example, <i>a = 1, b = 2, …, z = 26.</i></p>
+        <p class="mb-3">
+            Instead of characters, a string can then be represented as a number in a positional numeral system with some base. The base is usually chosen as a prime number larger than the maximum character code.</p>
+        <p class="mb-3">
+            For example, with base = 31: "abz" = <code>31^0*1 + 31^1*2 + 31^2*26 = 25049 </code>    </p>
+        <p class="mb-3">
+        Thus, two <u>identical strings</u> will always have the <u>same hash value</u>. However, for long strings, the numeric value quickly grows too large to store. To handle this, we take the hash value modulo a large prime number. If the two modulo values are equal, we <strong>assume</strong> the strings are equal.</p>
+        <p class="mb-3">
+            Of course, <code>a mod m = b mod m</code> does not guarantee <code>a = b</code>. The probability of such a collision is about <code>1/m</code>. To reduce this further, we often use two large prime moduli at the same time. In that case, the probability of collision is about <code>1/(m1*m2)</code>, which is negligibly small for practical purposes.
+        </p>
+        <p class="mb-3">
+            <strong>2.2 Why should the base and modulus be prime?</strong></p>
+        <p class="mb-3">
+            If the base and modulus share common factors, patterns can repeat more frequently, increasing the chance of collisions. Choosing primes avoids this issue and ensures more uniform hash distribution.</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// =======================
+// Rolling Hash Template
+// =======================
+
+// Some common choices for base: 31, 41, 311, 331
+// Some common choices for modulus: 1e9+7, 1e9+9, 1e9+21, 1e9+33
+// Notes:
+//   power[i] = base^i (mod mod[id])
+//   f[i]     = hash value of substring s[1] → s[i]
+// To compute hash of substring s[l…r]:
+//   hash(l,r) = f[r] − f[l−1] * power[r−l+1] (mod mod[id])
+
+const int maxn = 2e6+5;
+const int num  = 1e9+7;
+
+string s;
+long long n;
+
+// double hashing: 2 bases and 2 mods
+long long base[] = {31, 41};
+long long mod[]  = {num, num+2};
+
+// power[id][i] = base[id]^i mod mod[id]
+// f[id][i]     = hash of prefix s[1..i] with (base[id], mod[id])
+long long power[2][maxn], f[2][maxn];
+
+// get hash of substring s[l..r] under hash function id
+long long gt(int l, int r, int id) {
+    return ((f[id][r] - f[id][l-1] * power[id][r-l+1]) % mod[id] + mod[id]) % mod[id];
+}
+
+void input() {
+    power[0][0] = power[1][0] = 1;
+
+    cin &gt;&gt; s;
+    n = s.size();
+    s = '*' + s; // 1-indexing
+
+    for (int i = 1; i &lt;= n; ++i) {
+        for (int id = 0; id &lt; 2; ++id) {
+            power[id][i] = power[id][i-1] * base[id] % mod[id];
+            f[id][i]     = (f[id][i-1] * base[id] + s[i] - 'a' + 1) % mod[id];
+        }
+    }
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Hash XOR</h2>
+      <p class="mb-3">
+        <strong>Problem:</strong> Given an array of integers a of length (n ≤ 10^5) with 1 ≤ a_i ≤n and q ≤ 10^5 queries of the form (l, r). For each query, determine whether the substring a[l] → a[r] is a perfect sequence. (A perfect sequence is a permutation of the sequence 1 → (r-l+1))
+      </p>  
+      <p class="mb-3">
+        <u>We can see that:</u> The order of the numbers does not matter
+      </p>
+      <p class="mb-3">
+        <strong>Solution:</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Assign random digits to the sequence (h[i] is the random value of i)</li>
+        <li>A perfect sequence has the following property: 
+        <ol class="list-[square] list-inside ml-8">
+            <li><code>h(1)⊕h(2)⊕⋯⊕h(r-l+1) = h(a_l)⊕h(a_l+1)⊕⋯⊕h(a_r)</code></li>
+          </ol>  
+        </li>
+        <li>Thus, we only need to use an XOR array (prefix array) to solve the problem by checking if the XOR of two segments is equal with a low error probability</li>
+        <li>The collisions rate will be 1 / max(h[i]) = 1 / 2^64  since each bit has a 1/2 chance of error and there are a maximum of 64 bits (sufficiently good)</li>
+      </ul>
+    </section>
+            
+     <!-- Section 4 -->
+    <section id="add" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Hash sum</h2>
+      <p class="mb-3">
+        <strong>Problem:</strong> Given a sequence of n integers a (n ≤ 10^5) with 1 ≤ a_i ≤n and q ≤ 10^5 queries of the form l, r, k, u_1, v_1, .., u_k, v_k. For each query, determine whether the substring a[l] → a[r] contains exactly u_1 numbers v_1, … , u_k numbers v_k (sum k ≤ 10^5).
+      </p>  
+      <p class="mb-3">
+        <strong>Solution:</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Assign random digits to the sequence (h[i] is the random value of i)</li>
+        <li>If a segment satisfies the query, it will have the property: 
+        <ol class=" ml-8">
+            <li><code>h(a_l) + h(a_l+1) + ... + h(a_r) = h(u_1)*v_1 + h(u_2)*v_2 + ... + h(u_k)*v_k
+</code></li>
+          </ol>  
+        </li>
+        <li>Thus, we only need to use a prefix array (cumulative array) to solve the problem.</li>
+        <li>Since the numbers may be very large, we take the modulus, and the probability of error is 1 / mod (sufficiently good)</li>
+      </ul>
+
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+using ll = long long;
+const char el ='\n';
+const int maxn = 2e5+5;
+const ll inf = 1e18+1;
+ll n, a[maxn], b[maxn], sum[2][maxn];
+map&lt;ll,ll&gt; mark;
+mt19937 rd(chrono::steady_clock::now().time_since_epoch().count());
+
+ll Rand(ll l, ll r)
+{
+    return l + rd()%(r-l+1);
+}
+
+bool check(int l, int r, int u, int v)
+{
+    if(r-l+1!=v-u+1)    return false;
+    return (sum[0][r] - sum[0][l-1] == sum[1][v] - sum[1][u-1]);
+}
+
+void input()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;++i)   cin&gt;&gt;a[i];
+    for(int i=1;i&lt;=n;++i)   cin&gt;&gt;b[i];
+    for(int i=1;i&lt;=n;++i)
+    {
+        if(!mark[a[i]])   mark[a[i]] = Rand(1e17,inf);
+        a[i] = mark[a[i]];
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        if(!mark[b[i]])   mark[b[i]] = Rand(1e17,inf);
+        b[i] = mark[b[i]];
+    }
+    for(int i=1;i&lt;=n;++i)
+    {
+        sum[0][i] = sum[0][i-1] + a[i];
+        sum[1][i] = sum[1][i-1] + b[i];
+    }
+    int q;
+    cin&gt;&gt;q;
+    for(int i=1,l,r,u,v;i&lt;=q;++i)
+    {
+        cin&gt;&gt;l&gt;&gt;r&gt;&gt;u&gt;&gt;v;
+        if(check(l,r,u,v))  cout&lt;&lt;"Yes"&lt;&lt;el;
+        else                cout&lt;&lt;"No"&lt;&lt;el;
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    input();
+    return 0;
+}
+
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="get" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Hash tree</h2>
+      <p class="mb-3">
+        <strong>Problem:</strong> <a href="https://cses.fi/problemset/task/1701/" class="text-blue-600 hover:underline">Tree Isomorphism II - CSES</a>
+      </p>  
+      <p class="mb-3">
+        <strong>Method 1: Ahu encoding (using parentheses)</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Read more in the following blog post</li>
+        <li><a href="https://codeforces.com/blog/entry/101010" class="text-blue-600 hover:underline">[Tutorial] Tree Isomorphism CSES - Codeforces</a></li>
+      </ul>
+      <p class="mb-3">
+        <strong>Method 2: Hash sum</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>For each tree, generate a unique hash code for it</li>
+        <li>The hash code of the current tree = the sum of the hash codes of its direct children</li>
+      </ul>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+const long long mod = 1e18 + 3;
+const int MaxN = 1e5 + 5;
+const int Base = 31;
+
+int n;
+vector&lt;int&gt; grapha[MaxN];
+vector&lt;int&gt; graphb[MaxN];
+
+void Inp()
+{
+    cin &gt;&gt; n;
+    for (int x = 1; x &lt;= n; x++)
+    {
+        grapha[x].clear();
+        graphb[x].clear();
+    }
+    for (int x = 1; x &lt; n; x++)
+    {
+        int u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        grapha[u].push_back(v);
+        grapha[v].push_back(u);
+    }
+    for (int x = 1; x &lt; n; x++)
+    {
+        int u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        graphb[u].push_back(v);
+        graphb[v].push_back(u);
+    }
+}
+
+long long RandLL(long long l, long long r)
+{
+    long long res = 0;
+    for (int x = 0; x &lt; 4; x++)
+    {
+        res = (res &lt;&lt; 15) ^ (rand() & ((1 &lt;&lt; 15) - 1));
+    }
+    return l + res % (r - l + 1);
+}
+
+map&lt;long long, long long&gt; mp;
+
+long long DFS1(int u, int p)
+{
+    long long k = Base;
+    for (int x : grapha[u])
+    {
+        if (x != p)
+        {
+            long long q = DFS1(x, u), hashing;
+            if (mp.find(q) == mp.end())
+            {
+                hashing = RandLL(1, 1e18);
+                mp[q] = hashing;
+            }
+            else
+            {
+                hashing = mp[q];
+            }
+            k = (k + hashing) % mod;
+        }
+    }
+    return k;
+}
+
+long long DFS2(int u, int p)
+{
+    long long k = Base;
+    for (int x : graphb[u])
+    {
+        if (x != p)
+        {
+            long long q = DFS2(x, u), hashing;
+            if (mp.find(q) == mp.end())
+            {
+                hashing = RandLL(1, 1e18);
+                mp[q] = hashing;
+            }
+            else
+            {
+                hashing = mp[q];
+            }
+            k = (k + hashing) % mod;
+        }
+    }
+    return k;
+}
+
+void Exc()
+{
+    mp.clear();
+    if (DFS1(1, -1) == DFS2(1, -1))
+    {
+        cout &lt;&lt; "YES" &lt;&lt; "\n";
+    }
+    else
+    {
+        cout &lt;&lt; "NO" &lt;&lt; "\n";
+    }
+}
+
+int main()
+{
+    //freopen("J.INP", "r", stdin);
+    //freopen("J.OUT", "w", stdout);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    srand(time(nullptr));
+    int test = 1;
+    cin &gt;&gt; test;
+    for (int x = 1; x &lt;= test; x++)
+    {
+        Inp();
+        Exc();
+    }
+    return 0;
+}
+
+        </code></pre>
+      </div>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

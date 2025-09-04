@@ -41,6 +41,12 @@ const blogPosts = {
         title: "DP Digit",
         desc: "A technique used to solve problems that involve counting the number of integers in a range that satisfy a certain property.",
         link: "algo/dpdigit/dpdigit.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "Hash",
+        desc: "Hashing is a technique that converts a string into a number, making it much faster to compare or search substrings",
+        link: "algo/hash/hash.html"
     }
 
   ],
