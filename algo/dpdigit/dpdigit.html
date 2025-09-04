@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/dpdigit/dpdigit.html" />
+  <meta charset="UTF-8" />
+  <title>DP Digit | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A technique used to solve problems that involve counting the number of integers in a range that satisfy a certain property." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">DP Digit</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Problem</a></li>        
+        <li><a href="#observe" class="hover:underline">Observation</a></li>
+        <li><a href="#algo" class="hover:underline">Algorithm</a></li>
+        <li><a href="#build" class="hover:underline">How to calculate G(i, fl, sum)</a></li>
+        <li><a href="#get" class="hover:underline">Optimization</a></li>
+        <li><a href="#problems" class="hover:underline">Problem set</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Problem</h2>
+      <p class="mb-3">
+        Given two numbers <code>0 ≤ L ≤ R ≤ 1e18</code>, count the number of numbers whose sum of digits is a prime number in the range <code>[L…R]</code>      </p>
+ 
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="observe" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Observation</h2>
+        <p class="mb-3">
+            <strong>Consider two numbers:</strong> <code>23****</code> and <code>14****</code>. We can see that the number of ways to fill in the asterisks (*) so that both numbers satisfy the problem statement is the same. We call this the function <code>f()</code>. If we can calculate <code>f()</code>, we can use that value to solve <code>32****</code> or <code>50****</code> </p> 
+        <p class="mb-3">
+            <u>→ We call <code>f()</code> is the number of ways to fill the asterisks (*) above. If we can calculate <code>f()</code>, we can use that value to solve <code>32****</code> or <code>50****</code></u> </p> 
+        <p class="mb-3">
+            <strong>We can see that f() depends on:</strong> </p>
+        <ul class="list-disc list-inside space-y-2 mb-3">
+        <li>
+            The number of digits to be filled: <code>5****</code> and <code>23***</code> have different functions <code>f()</code>       </li>
+        <li>
+            The sum of the existing digits: <code>5****</code> and <code>4****</code> have different <code>f()</code> functions        </li>
+        <li>
+          The condition ≤ R          
+        </li>
+            
+        </ul>
+       <p class="mb-3">
+            For example, we have <code>L = 0, R = 4356</code>, and two numbers to fill in: <code>A = 43**</code> and <code>B = 34**</code>. We see that the <code>f()</code> functions for these two numbers are different. For example, we could fill in <code>B = 3457</code>, but <code>A = 4357 &gt; R</code> </p>      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+       
+    </section>
+
+    <!-- Section 3 -->
+    <section id="algo" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Algorithm</h2>
+
+      <p class="mb-3">
+        Let <code>G(x)</code> be the number of numbers ≤ x such that the sum of its digits is prime. Then, we have the following three parameters to compute <code>G()</code>:   
+      </p>  
+      <ul class="list-disc list-inside space-y-2 mb-3">
+
+        <li>Int i: the current position being considered, numbered from 1
+          <ol class="list-[square] list-inside ml-8">
+            <li>Example: in the number <code>34**</code>, i = 3</li>
+          </ol>
+        </li>
+
+        <li>Bool fl: flag variable indicating the condition. fl = true means free filling, fl = false means limited filling
+          <ol class="list-[square] list-inside ml-8">
+            <li>Example: Let x = 7865</li>
+            <li>We are examining the number <code>67**</code>. In this case, we observe that regardless of how we fill in the digits, the resulting number is still ≤ x, so fl = true  </li>
+            <li>We are examining the number <code>78**</code>. In this case, we see that <code>(**)</code> must be ≤ 65, so fl = false</li>
+          </ol>
+        </li>
+        
+        <li>Int sum: the sum of the digits being constructed up to position i 
+          <ol class="list-[square] list-inside ml-8">
+            <li>Example: Building the number <code>78**</code>, sum = 15</li>
+          </ol>
+        </li>
+      </ul>
+      <p class="mb-3">
+        We have the function <code>G(i,fl,sum)</code>      </p>
+      <p class="mb-3">
+        We decompose the number <code>x = d[1…n]</code>, where <code>d[i]</code> gives us the i-th digit of x     </p>  
+    </section>
+     <!-- Section 4 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. How to calculate G(i, fl, sum)</h2>
+      
+      
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+          <strong>If i > n:</strong> We have generated a number. At this point, we only need to check if the sum is prime?        
+        <li>
+          <strong>If i ≤ n:</strong> We need to recursively calculate <code>G(i + 1,new_fl,new_sum)</code> by trying to fill every digit satisfying k into position i        
+        </li>
+        <li>
+          <strong>Conditions for k:</strong>
+          <ol class="list-[square] list-inside ml-8">
+            <li>If fl = true, we fill k = [0….9]</li>
+            <li>If fl = false, we fill k ≤ d[i], or k = [0…d[i]]</li>
+          </ol>        
+        </li>
+        <li>
+          <strong>Conditions for new_fl::</strong>
+          <ol class="list-[square] list-inside ml-8">
+            <li>If fl = true, whatever we fill in new_fl remains true.</li>
+            <li>If fl = false: if k < d[i], then new_fl = true; if k = d[i], then new_fl = false</li>
+          </ol>        
+        </li>
+      </ul>
+
+      <p class="mb-3">
+        <strong>Example:</strong> Consider <code>x = d[4] = 3452</code>, we are filling in the number <code>34**</code>. Obviously, we see that fl = false. If we fill in <code>340*</code> or <code>342*</code>, we see that we can then fill in freely, so new_fl = true. But if we fill in <code>345*</code>, we again have new_fl = false      </p>
+      <p class="mb-3">
+        <strong>Therefore:</strong> we have a simple code to calculate <code>new_fl: new_fl = fl & (k == d[i])</code> </p>
+
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+lli G(int i, bool fl, int sum){
+  if(i &gt; n){
+    return &lt;sum is a prime number?&gt;;
+  
+  lli ans = 0;
+  int lim = (tight)? 9 : d[i];
+  for(int k = 0; k &lt;= lim; ++k){
+    bool nfl = fl & (k == d[i]);
+    ans = ans + G(i + 1, nfl, sum + k);
+  }
+  return ans; 
+}
+        </code></pre>
+      </div>
+      <p class="mb-3">
+        <strong>Then,</strong> we can solve the problem as follows:</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+&lt;Input&gt;
+//convert number R to array d[1..n];
+toDigit(R);
+
+//start constructing number at position i = 1, constraint ≤ d[1], and sum = 0
+lli x = G(1, 0, 0); 
+
+toDigit(L - 1);
+lli y = G(1, 0, 0);
+cout &lt;&lt; x - y;
+
+//Time complexity: O(R - L) → TLE
+        </code></pre>
+      </div>
+      <p class="mb-3">
+        <strong>Why TLE? </strong> It's clear that we run the G function for n positions <code>i = [1…n]</code>, with each position having a maximum limit of 9. Essentially, this is backtracking to generate all natural numbers from <code>0…L, 0…R</code></p>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="get" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Optimization</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>We recall the observation at the beginning of the problem. At that point, we define <code>f[i][fl][sum]</code>: storing the value <code>G(i,fl,sum)</code></li>
+      </ul>
+      <p class="mb-3">
+        <strong>→ At this point, time complexity becomes: O(n x 2 x sum) with a maximum sum of 9*18 = 172.      </p></strong>
+      <ul class="list-disc list-inside space-y-2 mb-2"></ul>
+        <li>This is recursion with memory: when calling the function <code>G(i,fl,sum)</code>, if the value <code>f[i][fl][sum]</code> already exists, we return that value immediately, without needing to run the for loop below</li>
+        <li>Why? Because once the entire array f is complete, whenever we call the <code>G()</code> function, we can immediately calculate that value in O(1). Therefore, the time complexity is reduced to the time required to complete the array f: O(n * 2 * sum)</li>
+      </ul>
+      
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+lli G(int i, bool fl, int sum){
+  if(i &gt; n)
+    return &lt;sum la so nguyen to?&gt;;
+  
+  lli ans = f[i][fl][sum];
+  if(ans != -1) return ans;
+  ans = 0;
+  int lim = (tight)? 9 : d[i];
+  for(int k = 0; k &lt;= lim; ++k){
+    bool nfl = fl & (k == d[i]);
+    ans = ans + G(i + 1, nfl, sum + k);
+  }
+  return ans; 
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 7 -->
+    <section id="problems" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">6. Problem set</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://lqdoj.edu.vn/contest/dpdigitt" class="text-blue-600 hover:underline">Contest: DP Digit - Le Quy Don Online Judge</a></li>
+        <li><a href="https://oj.vnoi.info/problems/?type=5&point_start=&point_end=&order=-user_count" class="text-blue-600 hover:underline">Contest: DP Digit - VNOJ
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

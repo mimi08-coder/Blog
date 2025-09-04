@@ -35,6 +35,12 @@ const blogPosts = {
         title: "Dijikstra's Algorithm",
         desc: "Lean a classic graph search algorithm used to find the shortest paths between nodes in a weighted graph.",
         link: "algo/dij/dij.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "DP Digit",
+        desc: "A technique used to solve problems that involve counting the number of integers in a range that satisfy a certain property.",
+        link: "algo/dpdigit/dpdigit.html"
     }
 
   ],
