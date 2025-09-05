@@ -59,9 +59,9 @@ const blogPosts = {
   arduino: [
     {
       id: "obstacle-robot",
-      title: "Obstacle Avoiding Robot",
-      desc: "Use ultrasonic sensors and servo motors for auto-navigation.",
-      link: "#obstacle-robot"
+      title: "Line Following Robot",
+      desc: "Line-following robot is one of the most popular, simple, and engaging projects for beginners in electronics and programming.",
+      link: "ardui/lfr/lfr.html"
     },
     {
       id: "ir-remote",
