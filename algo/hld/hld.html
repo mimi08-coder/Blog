@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/algo/hld/hld.html" />
+  <meta charset="UTF-8" />
+  <title>Heavy Light Decomposition | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A technique used to efficiently handle queries on the path between any two nodes in a tree." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Heavy Light Decomposition</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Problem</a></li>
+        <li><a href="#structure" class="hover:underline">Idea behind</a></li>
+        <li><a href="#build" class="hover:underline">Template</a></li>
+        <li><a href="#problems" class="hover:underline">Problem set</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Problem</h2>
+      <p class="mb-3">
+        You are given a tree consisting of n nodes. The nodes are numbered 1,2,...,n. Each node has a value. Your task is to process following types of queries:
+      </p>
+      <ul class="list-decimal  list-inside space-y-2 mb-2">
+        <li>
+            Change the value of node s to x        </li>
+        <li>
+            Find the maximum value on the path between nodes a and b        </li>
+      </ul>
+      <p class="mb-3">
+        <strong>Solution:</strong> We will use Heavy-Light Decomposition (HLD) - a technique used to efficiently handle queries (such as max, xor, sum, …) on the path between any two nodes in a tree. A naive solution requires traversing the entire path, which can take O(n) in the worst case. Heavy-Light Decomposition (HLD) provides a way to reduce this to O(log² n) per query.
+      </p>
+      <p class="mb-3">
+        <strong>Prerequisite knowledge:</strong>
+      </p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>Segment tree</li>
+        <li>Depth-first search (DFS)</li>
+        <li>Euler tour on tree</li>
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Idea behind</h2>
+      <p class="mb-3">
+        <strong>How it works?</strong>
+      </p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>We want to minimize the number of times we “jump” between different segments when traveling from any node to the root.</li>
+        <li>For each node, choose its heavy child: the child with the largest subtree size.</li>
+        <li>The edge to this heavy child is called a heavy edge.</li>
+        <li>All other edges are called light edges.</li>    </ul>
+    
+      <p class="mb-3">
+        <strong>Why choose the largest child?</strong>
+      </p>      
+      <p class="mb-3">
+        Suppose a node <code>u</code> has a subtree of size <code>sz[u]</code>.
+      </p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>Its heavy child must have at least sz[u] / 2 nodes.</li></ul>
+      <p class="mb-3"> <u>This ensures:</u> </p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>Every time we move through a light edge, the subtree size drops by at least half.</li>
+        <li>So, from any node to the root, you can cross at most O(log n) light edges.</li>
+        </ul>
+      <p class="mb-3"> <u>💡 In other words:</u></p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>A path can contain many heavy edges, but it will cross only about log n light edges.</li>
+        <li>That’s the key to reducing complexity.</li>
+        </ul>
+      <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3"> <strong>Build chains:</strong>  </p>
+      <p class="mb-3">Consecutive heavy edges are connected to form a chain, and each chain is compressed into a continuous segment of an array (using Euler Tour + position numbering pos[] ) to reduce time complexity.</p>
+      <p class="mb-3"> <u>→ Then, instead of querying directly on the tree, we only need to query over contiguous array ranges.</u>  </p>
+
+      
+    </section>
+
+    <!-- Section 3 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Template</h2>
+      <p class="mb-3">
+        <strong>Initialization and Input</strong>  
+      </p>  
+
+      </div>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#define pp push_back
+using namespace std;
+using ll = long long;
+const char el ='\n';
+const char sp = ' ';
+const int maxn = 2e5+5;
+
+int n,q;
+int sz[maxn],h[maxn],par[maxn],head[maxn],id[maxn],pos[maxn],a[maxn];
+// sz[u]   = size of subtree rooted at u
+// h[u]    = depth of u
+// par[u]  = parent of u
+// head[c] = head node of chain c
+// id[u]   = which chain node u belongs to
+// pos[u]  = position of u in the segment tree
+// a[u]    = initial value of node u
+
+int curchain,curpos; // track current chain index and position
+vector&lt;int&gt; adj[maxn];
+int st[4*maxn]; // segment tree
+
+void input()
+{
+    cin&gt;&gt;n&gt;&gt;q;
+    for(int i=1;i&lt;=n;++i) cin&gt;&gt;a[i]; // initial values
+    for(int i=1,u,v;i&lt;n;++i)
+    {
+        cin&gt;&gt;u&gt;&gt;v;
+        adj[u].pp(v);
+        adj[v].pp(u);
+    }
+    DFS(1,0); // prepare size, depth, parent
+    curpos=curchain=1;
+    HLD(1,0); // build decomposition
+
+    for(int i=1,t,u,v;i&lt;=q;++i)
+    {
+        cin&gt;&gt;t&gt;&gt;u&gt;&gt;v;
+        if(t==1) udt(1,1,n,pos[u],v); // point update on node u
+        else cout&lt;&lt;solve(u,v)&lt;&lt;sp;     // query max on path u→v
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    input();
+    return 0;
+}
+        </code></pre>
+      </div>
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Depth-first search:</strong> to pre-compute subtree sizes (to pick heavy child), depths, and parents.  
+      </p>  
+
+      </div>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void DFS(int u, int v)
+{
+    h[u]=h[v]+1;   // depth[u] = depth[parent]+1
+    sz[u]=1;
+    par[u]=v;
+    for(int i:adj[u])
+    {
+        if(i==v) continue;
+        DFS(i,u);
+        sz[u]+=sz[i]; // accumulate size
+    }
+}
+        </code></pre>
+      </div>
+
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Segment Tree:</strong> for point update + range maximum query
+      </p>  
+
+      </div>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void udt(int id, int l, int r, int u, int v)
+{
+    if(l&gt;u or r&lt;u)  return;         // outside the update position
+    if(l==r) st[id]=v;              // leaf node, assign value
+    else
+    {
+        int mid=(l+r)/2;
+        udt(id*2,l,mid,u,v);
+        udt(id*2+1,mid+1,r,u,v);
+        st[id]=max(st[id*2],st[id*2+1]); // recalc parent node
+    }
+}
+
+int gt(int id, int l, int r, int u, int v)
+{
+    if(l&gt;v or r&lt;u)  return 0;       // outside range
+    if(l&gt;=u && r&lt;=v) return st[id]; // fully inside range
+    else
+    {
+        int mid=(l+r)/2;
+        return max(gt(id*2,l,mid,u,v), gt(id*2+1,mid+1,r,u,v));
+    }
+}
+        </code></pre>
+      </div>
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Heavy-Light Decomposition:</strong> to build chains and map nodes to segment tree positions.
+      </p>  
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>If the current chain has no head, assign the current node as the head.</li>
+        <li>Mark the chain ID and position in the segment tree for the current node.</li>
+        <li>Insert the node's value into the segment tree at its position.</li>
+        <li>Identify the heavy child (the child with the largest subtree size).</li>
+        <li>Recursively continue the heavy edge in the same chain.</li>
+        <li>For each light child, start a new chain and recursively decompose it.</li> </ul>
+      <p class="mb-3">
+        <u>👉 Key idea:</u>
+      </p>
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>Heavy edges stays in the same chain because we prioritize decomposing the heavy child first</li>
+        <li>Path u → v is cut into ≤ O(log n) chains.</li>
+      </ul>
+
+
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void HLD(int u, int v)
+{
+    if(head[curchain]==0) head[curchain]=u; // new chain → assign head
+    id[u]=curchain;                          // mark chain of u
+    pos[u]=curpos;                           // position in segtree
+    udt(1,1,n,curpos,a[u]);                  // insert value into segtree
+    ++curpos;
+
+    int tmp=0; // tmp = heavy child
+    for(int i:adj[u])
+    {
+        if(i==v) continue;
+        if(sz[tmp]&lt;sz[i]) tmp=i; // pick child with largest subtree
+    }
+    if(tmp!=0) HLD(tmp,u); // continue heavy edge in same chain
+
+    for(int i:adj[u]) // process light edges
+    {
+        if(i!=v && i!=tmp)
+        {
+            ++curchain;      // new chain
+            HLD(i,u);        // decompose light child
+        }
+    }
+}
+        </code></pre>
+      </div>
+
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3">
+        <strong>Query on path u → v:</strong> find maximum value on path u → v
+      </p>  
+      <ul class="list-disc  list-inside space-y-2 mb-2">
+        <li>While u and v are in different chains:
+            <ol class="list-[square] list-inside ml-8">
+                <li>Query segment [head[u], u].</li>
+                <li>Move u up one chain (to parent of head[u]).</li></ol>
+        </li>
+        <li>When they are in the same chain: query [u, v].</li>
+        <li>Complexity = O(log² n).</li></ul>
+
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+int solve(int u, int v)
+{
+    int ans=0;
+    while(id[u]!=id[v]) // while not in the same chain
+    {
+        if(id[u]&lt;id[v]) swap(u,v); 
+        // query from head of u’s chain to u
+        ans=max(ans, gt(1,1,n,pos[head[id[u]]], pos[u]));
+        u=par[head[id[u]]]; // move u up to parent of its chain head
+    }
+    if(h[u]&gt;h[v]) swap(u,v); // now same chain → query directly
+    ans=max(ans, gt(1,1,n,pos[u],pos[v]));
+    return ans;
+}
+        </code></pre>
+      </div>
+
+    </section>
+
+    <!-- Section 7 -->
+    <section id="problems" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Problem set</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://oj.vnoi.info/contest/euler_tour" class="text-blue-600 hover:underline">Contest: Educational Euler Tour and HLD - VNOJ</a></li>
+      </ul>
+    </section>
+
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>

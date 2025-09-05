@@ -47,6 +47,12 @@ const blogPosts = {
         title: "Hash",
         desc: "Hashing is a technique that converts a string into a number, making it much faster to compare or search substrings",
         link: "algo/hash/hash.html"
+    },
+    {
+        id: "khop-va-cau",
+        title: "Heavy Light Decomposition",
+        desc: "A technique used to efficiently handle queries on the path between any two nodes in a tree.",
+        link: "algo/hld/hld.html"
     }
 
   ],
