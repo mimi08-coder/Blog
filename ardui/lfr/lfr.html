@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/ardui/lfr/lfr.html" />
+  <meta charset="UTF-8" />
+  <title>Line Following Robot | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Line-following robot is one of the most popular, simple, and engaging projects for beginners in electronics and programming. " />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Line Following Robot</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Introduction</a></li>
+        <li><a href="#structure" class="hover:underline">Components & Tools</a></li>
+        <li><a href="#build" class="hover:underline">Assembly Steps</a></li>
+        <li><a href="#add" class="hover:underline">Code</a></li>
+        <li><a href="#get" class="hover:underline">Video</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Introduction</h2>
+      <p class="mb-3">
+        <strong>Line-following robot</strong> is one of the most <u>popular</u>, <u>simple</u>, and <u>engaging</u> projects for beginners in electronics and programming. This robot works using infrared (IR) sensors to detect black or white lines on the ground, and it controls the motors so the robot can automatically follow a predefined path. Through this project, you will learn how to solder components, assemble mechanical parts, wire the control circuit, and program the Arduino to operate the robot.      </p>
+      
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Components & Tools</h2>      
+      <p class="mb-3"> <strong>Components & Materials:</strong></p>
+
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>2 DC motors with wheels</li>
+        <li>2 Infrared (IR) sensors</li>
+        <li>Arduino UNO R4</li>
+        <li>L293D Driver Shield</li>
+        <li>Female-to-female jumper wires</li>
+        <li>Ball transfer unit</li>
+        <li>PVC foam board (Fomex)</li>
+        <li>2-cell 18650 battery holder</li>
+        <li>2 18650 batteries</li>
+      </ul>
+      <p class="mb-3"> <strong>Tools:</strong></p>
+
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Tape</li>
+        <li>Screwdriver</li>
+        <li>Screws</li>
+        <li>Soldering iron</li>
+      </ul>
+      <p class="mb-3"> <strong>Software application:</strong></p>
+
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Arduino IDE</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Assembly Steps</h2>
+      <p class="mb-3">
+        <strong>Step 1: Preparing the Motors</strong>
+      </p>  
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Solder the red and black wires to the two terminals of each motor.</li>
+        <li>Ensure the solder joints are firm; optionally insulate with heat shrink tubing or electrical tape for safety.</li>
+      </ul>
+      <img src="1.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Step 2: Fabricating the Chassis</strong>
+      </p>  
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Measure and cut the Fomex sheet according to the desired size.</li>
+        <li>Secure the two DC motors and the ball caster onto the Fomex sheet using strong tape or screws.</li>
+      </ul>            
+      <img src="2.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Step 3: Installing the Control Circuit</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Plug the L293D Driver Shield into the Arduino UNO R4.</li>
+        <li>Fix the circuit assembly onto the Fomex sheet using tape or screws.</li>
+      </ul>      
+      <img src="3.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Step 4: Attaching the IR Sensors</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Measure the sensors and make suitable mounts.</li>
+        <li>Secure the sensors onto the mounts, then firmly attach them to the Fomex (usually at the front of the robot for line detection).</li>
+        <li>Distance between the two sensors: approximately 3 cm (should be wider than the black tape width).</li>
+        <li>Height from the sensors to the ground: about 0.5 cm to ensure stable signal detection.</li>
+      </ul>
+      <img src="4.png" alt="Convex vs Concave"class="rounded-md mb-2">
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Step 5: Power Supply</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>Attach the 18650 battery holder onto the chassis with tape.</li>
+        <li>Insert the two 18650 batteries into the holder.</li>
+      </ul>
+      <p class="mb-3">-----------------------------------------------------------------</p>
+
+      <p class="mb-3">
+        <strong>Step 6: Wiring</strong>
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><strong>Power:</strong> connect the red wire (+) from the battery holder to the +M port of EXT_PWR on the Shield, and the black wire (-) to GND.</li>
+        <li><strong>Motors:</strong> connect the two wires of the left motor to M1 and the right motor to M4 on the Shield.</li>
+        <li><strong>Sensors:</strong>
+            <ol class="list-[square] list-inside ml-8">
+                <li>Left IR sensor: VCC → +5V, GND → GND, OUT → A0 (L293D)</li>
+                <li>Right IR sensor: VCC → +5V, GND → GND, OUT → A1 (L293D)</li>
+            </ol>
+        </li>
+      </ul>
+      <img src="5.png" alt="Convex vs Concave"class="rounded-md mb-2">
+
+    </section>
+            
+     <!-- Section 4 -->
+    <section id="add" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">4. Code</h2>
+      
+      <p class="mb-3">
+        The line-following robot works by using IR sensors to detect black lines on a white surface. When a sensor detects a line (returns 1), the Arduino adjusts the speed and rotation direction of the two motors, allowing the robot to go straight, turn left, or turn right, keeping it following the path.
+      </p>
+      
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// Line Follower Robot using Adafruit Motor Shield V1
+// Adafruit Motor Shield V1 library (install from Library Manager)
+#include &lt;AFMotor.h&gt;
+
+// Declare IR sensor pins
+#define leftSensor A0   // Left IR sensor connected to A0
+#define rightSensor A1  // Right IR sensor connected to A1
+
+// Initialize two motors
+AF_DCMotor motor1(1, MOTOR12_1KHZ); // Left motor, M1 port
+AF_DCMotor motor2(4, MOTOR12_1KHZ); // Right motor, M4 port
+
+void setup() {
+  pinMode(leftSensor, INPUT);   // Set left sensor as input
+  pinMode(rightSensor, INPUT);  // Set right sensor as input
+  Serial.begin(9600);           // Enable Serial Monitor for debugging
+}
+
+// Store previous sensor state to avoid sending duplicate motor commands
+int prevLeft = -1;
+int prevRight = -1;
+
+void loop() {
+  int left = digitalRead(leftSensor);   // Read left sensor (0 = white, 1 = black)
+  int right = digitalRead(rightSensor); // Read right sensor (0 = white, 1 = black)
+
+  // Only process when sensor state changes
+  if (left != prevLeft || right != prevRight) {
+    prevLeft = left;
+    prevRight = right;
+
+    // Case 1: Both sensors on white (0,0) → line in the middle → go straight
+    if (left == 0 && right == 0) {
+      motor1.setSpeed(110);  // Left motor speed
+      motor1.run(FORWARD);   // Left motor forward
+      motor2.setSpeed(110);  // Right motor speed
+      motor2.run(FORWARD);   // Right motor forward
+    } 
+    // Case 2: Left=0, Right=1 → line touches right sensor → drift right → turn left
+    else if (left == 0 && right == 1) {
+      motor1.setSpeed(110);  
+      motor1.run(FORWARD);   // Left motor forward
+      motor2.setSpeed(110);  
+      motor2.run(BACKWARD);  // Right motor backward → rotate left
+    } 
+    // Case 3: Left=1, Right=0 → line touches left sensor → drift left → turn right
+    else if (left == 1 && right == 0) {
+      motor1.setSpeed(110);  
+      motor1.run(BACKWARD);  // Left motor backward
+      motor2.setSpeed(110);  
+      motor2.run(FORWARD);   // Right motor forward → rotate right
+    } 
+  }
+  delay(15); // Pause 15ms before next loop → reduce noise, allow motor reaction
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="get" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">5. Video</h2>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li><a href="https://youtu.be/T1BYmCA8ut8?si=lXQXyRC0eqTfft0O" class="text-blue-600 hover:underline">Line Following Robot - Youtube</a></li>
+      </ul>
+    </section>
+</section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>
