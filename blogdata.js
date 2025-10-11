@@ -58,16 +58,22 @@ const blogPosts = {
   ],
   arduino: [
     {
+      id: "ir-remote",
+      title: "Basic Arduino Commands",
+      desc: "Dive into the basic structure of an Arduino program and the fundamental commands that every beginner needs to know.",
+      link: "ardui/basic/basic.html"
+    },
+    {
+      id: "obstacle-robot",
+      title: "Infrared (IR) Sensor",
+      desc: "The infrared (IR) sensor is one of the most common components in robotics, especially in line-following robots.",
+      link: "ardui/ir/ir.html"
+    },
+    {
       id: "obstacle-robot",
       title: "Line Following Robot",
       desc: "Line-following robot is one of the most popular, simple, and engaging projects for beginners in electronics and programming.",
       link: "ardui/lfr/lfr.html"
-    },
-    {
-      id: "ir-remote",
-      title: "Controlling LEDs with IR Remote",
-      desc: "Use infrared remote to control LEDs with Arduino.",
-      link: "#ir-remote"
     }
   ]
 };

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../style/ava.png" />
+  <link rel="canonical" href="https://mimicoder.site/ardui/basic/basic.html" />
+  <meta charset="UTF-8" />
+  <title>Basic Arduino Commands | Tien Minh's Coding Journal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dive into the basic structure of an Arduino program and the fundamental commands that every beginner needs to know." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Tien Minh" />
+  <!-- <script src="https://cdn.tailwindcss.com"></script>   -->
+  <link href="../../style/output.css" rel="stylesheet"></head>
+   <link href="../../prism/prism.css" rel="stylesheet" />
+
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Navbar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Logo + title -->
+    <div class="flex items-center space-x-3">
+      <img src="../../style/ava.png" alt="Logo" class="h-7 w-7 object-contain" />
+      <h1 class="text-xl font-bold text-blue-700">Tien Minh's Coding Journal</h1>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="hidden md:flex space-x-6 text-sm">
+      <a href="../../index.html#home" class="hover:text-blue-700">Home</a>
+      <a href="../../index.html#algorithms" class="hover:text-blue-700">Algorithms</a>
+      <a href="../../index.html#arduino" class="hover:text-blue-700">Arduino</a>
+      <a href="../../index.html#about" class="hover:text-blue-700">About</a>
+      <a href="../../index.html#contact" class="hover:text-blue-700">Contact</a>
+    </div>
+
+    <!-- Hamburger button -->
+    <div class="md:hidden">
+      <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav links -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 space-y-2 text-sm">
+    <a href="../../index.html#home" class="block text-gray-700 hover:text-blue-700">Home</a>
+    <a href="../../index.html#algorithms" class="block text-gray-700 hover:text-blue-700">Algorithms</a>
+    <a href="../../index.html#arduino" class="block text-gray-700 hover:text-blue-700">Arduino</a>
+    <a href="../../index.html#about" class="block text-gray-700 hover:text-blue-700">About</a>
+    <a href="../../index.html#contact" class="block text-gray-700 hover:text-blue-700">Contact</a>
+  </div>
+</nav>
+
+<!-- ############################################################################################################################ -->
+  <!-- Blog content -->
+  <section class="max-w-3xl mx-auto mt-12 px-6">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6">Basic Arduino Commands</h2>
+
+    <!-- Table of Contents -->
+    <div class="border border-gray-300 rounded-lg bg-white shadow-sm p-4 mb-8">
+      <h2 class="text-xl font-semibold flex items-center text-gray-700 mb-3">
+        📌 <span class="ml-2">Table of Contents</span>
+      </h2>
+      <ul class="list-decimal list-inside space-y-1.5 text-blue-600 font-medium">
+        <li><a href="#problem" class="hover:underline">Introduction</a></li>
+        <li><a href="#structure" class="hover:underline">Structure of an Arduino Program</a></li>
+        <li><a href="#build" class="hover:underline">Basic Arduino Commands</a></li>
+      </ul>
+    </div>  
+
+    <!-- Section 1 -->
+    <section id="problem" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">1. Introduction</h2>
+      <p class="mb-3">
+        <strong>Arduino</strong> is an open-source hardware and programming platform that is <u>easy</u> to learn and <u>widely used</u> in education, research, and robotics projects. Its strength lies in a simple programming language (based on C/C++) and a rich library ecosystem that makes controlling components straightforward.      </p>
+       
+    </section>
+
+    <!-- Section 2 -->   
+    <section id="structure" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">2. Structure of an Arduino Program</h2>
+      <p class="mb-3">
+        Every Arduino program (called a sketch) contains at least <strong>two main</strong> functions:
+      </p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            <strong>setup():</strong> Used for initialization (pin configurations, starting Serial communication, initializing sensors/motors).        </li>
+        <li>
+            <strong>loop():</strong> Acts as the “heart” of the program, running endlessly until the board is turned off.        </li></ul>
+
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+void setup() {
+  // Initialization: runs once when the board powers up or resets
+}
+
+void loop() {
+  // Repeats continuously, contains the main logic
+}
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="build" class="mb-10">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-3">3. Basic Arduino Commands</h2>
+      <p class="mb-3">
+        <strong>a) Managing I/O Pins</strong>
+      </p>
+      <p class="mb-3">
+        <u>pinMode(pin, mode):</u> Declares the function of a pin</p>
+        <ul class="list-disc list-inside space-y-2 mb-2">
+            <li>INPUT: receive signals from a sensor (0 or 1).</li>
+            <li>OUTPUT: send signals to control a device (LED, motor).</li>
+            <li>INPUT_PULLUP: use the built-in pull-up resistor (often with buttons).</li>
+        </ul>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+pinMode(13, OUTPUT); // Pin 13 set as output (LED control)
+pinMode(7, INPUT);   // Pin 7 set as input (button)
+pinMode(8, INPUT_PULLUP); // Pin 8 set as input with pull-up resistor
+        </code></pre>
+      </div>
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><u>digitalWrite(pin, value):</u> Sends HIGH (5V) or LOW (0V) to a pin.</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+digitalWrite(13, HIGH); // Turn LED on
+digitalWrite(13, LOW);  // Turn LED off
+        </code></pre>
+      </div>                            
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><u>digitalRead(pin):</u> Reads the value from a pin (0 or 1).</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+int button = digitalRead(7);
+if (button == HIGH) {
+  // Do something when button is pressed
+}
+        </code></pre>
+      </div>   
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><u>analogRead(pin):</u> Reads an analog value (0-1023) from analog pins (A0-A5).</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+int value = analogRead(A0); // Read light sensor
+        </code></pre>
+      </div>      
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><u>analogWrite(pin, value):</u> Outputs a PWM signal (0-255) to simulate analog output.</p>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+// → Used for controlling LED brightness or DC motor speed.
+analogWrite(9, 128); // 50% duty cycle → medium LED brightness
+        </code></pre>
+      </div> 
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><strong>b) Serial Communication</strong></p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            <u>Serial.begin(baudrate):</u> Initializes serial communication at the specified baud rate (e.g., 9600).</li>
+        <li>
+            <u>Serial.print(data):</u> Sends data to the Serial Monitor without a newline.</li>
+        <li>
+            <u>Serial.println(data):</u> Sends data to the Serial Monitor with a newline.</li></ul>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+Serial.begin(9600);
+Serial.println("Hello Arduino!");
+        </code></pre>
+      </div> 
+      <p class="mb-3">-----------------------------------------------------------------</p>
+      <p class="mb-3"><strong>c) Timing Functions</strong></p>
+      <ul class="list-disc list-inside space-y-2 mb-2">
+        <li>
+            <u>delay(ms):</u> Pauses the program for the specified number of milliseconds.</li>
+        <li>
+            <u>millis():</u> Returns the number of milliseconds since the program started. Useful for timers without blocking the program (an alternative to delay).</li></ul>
+      <div class="relative bg-gray-800 text-white rounded-lg overflow-hidden my-4">
+        <button class="absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded copy-btn">
+          Copy
+        </button>
+        <pre class="language-cpp"><code class="language-cpp">
+delay(1000); // wait 1 second
+        </code></pre>
+      </div> 
+    </section>
+            
+  </section>
+  <!-- ############################################################################################################################ -->
+  <!-- Footer -->
+  <footer class="mt-20 bg-white text-center py-6 text-gray-600 text-sm">
+    © 2025 Phan Tien Minh. All rights reserved.
+  </footer>
+
+<!-- Responsive navbar   -->
+<script>
+  const toggleBtn = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  toggleBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
+<script src="../../prism/prism.js"></script>
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.nextElementSibling.querySelector('code').innerText;
+
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+  });
+</script>
+</body>
+</html>
